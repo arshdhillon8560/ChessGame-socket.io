@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chess Game</title>
+
+  <!-- TailwindCSS + Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Noto Sans Symbols', sans-serif;
+    }
+
+    .square {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      user-select: none;
+    }
+
+    .square.light {
+      background-color: #f0d9b5;
+    }
+
+    .square.dark {
+      background-color: #b58863;
+    }
+
+    .piece {
+      cursor: grab;
+    }
+
+    .piece.white {
+      color: white;
+      filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+    }
+
+    .piece.black {
+      color: black;
+    }
+
+    .flipped {
+      transform: rotate(180deg);
+    }
+
+    .flipped .square {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="bg-zinc-900 text-white min-h-screen flex flex-col items-center justify-start py-6 space-y-6">
+
+  <h1 class="text-3xl font-bold">Chess Game</h1>
+  <div id="role-indicator" class="text-lg">You are: <span class="font-bold">Spectator</span></div>
+  <div id="turn-indicator" class="text-lg font-semibold">Turn: White</div>
+
+  <div class="flex flex-col md:flex-row items-center gap-6">
+
+    <!-- Captured black pieces -->
+    <div id="captured-black" class="flex flex-wrap gap-2 text-2xl min-h-[3rem] w-40 justify-center"></div>
+
+    <!-- Chessboard -->
+    <div class="chessboard grid grid-cols-8 grid-rows-8 w-[90vw] max-w-[480px] aspect-square border-8 border-zinc-600 rounded-xl overflow-hidden"></div>
+
+    <!-- Captured white pieces -->
+    <div id="captured-white" class="flex flex-wrap gap-2 text-2xl min-h-[3rem] w-40 justify-center"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js" crossorigin="anonymous"></script>
+  <script src="/js/chessgame.js"></script>
+</body>
+</html>
