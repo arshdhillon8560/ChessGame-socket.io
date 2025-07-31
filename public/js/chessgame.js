@@ -1,4 +1,4 @@
-
+const socket = io();
 const chess = new Chess();
 
 const boardElement = document.querySelector(".chessboard");
@@ -12,7 +12,7 @@ let sourceSquare = null;
 let playerRole = null;
 let capturedPieces = [];
 
-// Get Unicode for pieces
+// Get Unicode symbol for each piece
 const getPieceUnicode = (piece) => {
   const unicode = {
     p: "♟", r: "♜", n: "♞", b: "♝", q: "♛", k: "♚",
@@ -23,18 +23,14 @@ const getPieceUnicode = (piece) => {
   return unicode[code] || "";
 };
 
-// Render board with correct orientation
+// Render the board
 const renderBoard = () => {
   const board = chess.board();
   boardElement.innerHTML = "";
 
-  // Show turn
   turnIndicator.textContent = `Turn: ${chess.turn() === "w" ? "White" : "Black"}`;
-
-  // Clear flip classes
   boardElement.classList.remove("flipped");
 
-  // Loop direction depends on role
   const rowIndices = playerRole === "b" ? [...Array(8).keys()].reverse() : [...Array(8).keys()];
   const colIndices = playerRole === "b" ? [...Array(8).keys()].reverse() : [...Array(8).keys()];
 
@@ -89,7 +85,7 @@ const renderBoard = () => {
   renderCapturedPieces();
 };
 
-// Update captured pieces
+
 const renderCapturedPieces = () => {
   capturedWhite.innerHTML = "";
   capturedBlack.innerHTML = "";
@@ -104,7 +100,7 @@ const renderCapturedPieces = () => {
   });
 };
 
-// Make move
+
 const handleMove = (source, target) => {
   const move = {
     from: `${String.fromCharCode(97 + source.col)}${8 - source.row}`,
@@ -114,7 +110,7 @@ const handleMove = (source, target) => {
   socket.emit("move", move);
 };
 
-// Socket events
+
 socket.on("playerRole", (role) => {
   playerRole = role;
   roleIndicator.innerHTML = `You are: <span class="font-bold">${role === "w" ? "White" : "Black"}</span>`;
@@ -127,28 +123,30 @@ socket.on("spectatorRole", () => {
   renderBoard();
 });
 
+
 socket.on("boardState", (fen) => {
   const oldBoard = chess.board().flat();
   chess.load(fen);
   const newBoard = chess.board().flat();
 
+  capturedPieces = [];
   newBoard.forEach((piece, i) => {
     if (piece === null && oldBoard[i]) {
-      capturedPieces.push(oldBoard[i]); // Track captured
+      capturedPieces.push(oldBoard[i]); 
     }
   });
 
   renderBoard();
 });
 
-socket.on("move", (move) => {
-  const capturedBefore = chess.get(move.to);
-  const result = chess.move(move);
-  if (capturedBefore && result) {
-    capturedPieces.push(capturedBefore);
-  }
-  renderBoard();
+
+socket.on("invalidMove", (move) => {
+  alert("Invalid move attempted!");
 });
 
-// Initial render
+socket.on("move", (move) => {
+  
+});
+
+
 renderBoard();
