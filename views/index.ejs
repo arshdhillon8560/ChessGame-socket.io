@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chess Game</title>
+  <title><%= title %></title>
 
   <!-- TailwindCSS + Font -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -73,6 +73,10 @@
   <!-- Scripts -->
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js" crossorigin="anonymous"></script>
+  <script>
+    // Connect socket - required to be inline if no JS file exists yet
+    const socket = io(); // DO NOT use localhost or port here
+  </script>
   <script src="/js/chessgame.js"></script>
 </body>
 </html>
